@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>WebSocket demo</title>
+    </head>
+    <script src="r2labprot.js"></script>
+    <body>
+        <script>
+            function sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+            var ws = new WebSocket("ws://127.0.0.1:8765/");
+            messages = document.createElement('ul');
+            ws.onopen = async function (event) {
+              var  start = "2018-06-27T00:00:00";
+              var  end = "2018-06-27T23:59:59";
+
+              var message = ask_register(I_RUN, start, end);
+              msg = JSON.stringify(message);
+              console.log(msg);
+              ws.send(msg);
+              await sleep(4000);
+              message = ask_register(I_BOOK, start, end);
+              msg = JSON.stringify(message);
+              console.log(msg);
+              ws.send(msg);
+              await sleep(4000);
+              message = ask_unregister();
+              msg = JSON.stringify(message);
+              console.log(msg);
+              ws.send(msg);
+              await sleep(4000);
+              faire = true;
+              if (faire){
+
+                  message = ask_book_info(start, end);
+                  msg = JSON.stringify(message);
+                  console.log(msg);
+                  ws.send(msg);
+                  await sleep(4000);
+                  payload = [];
+                  for(var i = 0 ; i< 3; i++){
+                  payload.push( update_request("inria_batman", start,
+                                                start + i*1000));
+                  }
+                  message = ask_book_modify(UPDATE, payload);
+                  msg = JSON.stringify(message);
+                  console.log(msg);
+                  ws.send(msg);
+                  await sleep(4000);
+                  payload = [];
+                  for(var i = 0 ; i< 3; i++){
+                  payload.push( create_request("inria_batman", start,
+                                                start + i*1000));
+                  }
+
+                  message = ask_book_modify(CREATE, payload);
+                  msg = JSON.stringify(message);
+                  console.log(msg);
+                  ws.send(msg);
+                  await sleep(4000);
+                  payload = [];
+                  for(var i = 0 ; i< 3; i++){
+                  payload.push( create_request("inria_batman", start,
+                                                start + i*1000));
+                  }
+
+                  message = ask_book_modify(DELETE, payload);
+                  msg = JSON.stringify(message);
+                  console.log(msg);
+                  ws.send(msg);
+                  await sleep(4000);
+                  message = ask_slices_info("ybleyfue");
+                  msg = JSON.stringify(message);
+                  console.log(msg);
+                  ws.send(msg);
+                  await sleep(4000);
+                  message = ask_modify_keys(ADD_KEY, ["key1", "key2"], "ybleyfuez");
+                  msg = JSON.stringify(message);
+                  console.log(msg);
+                  ws.send(msg);
+                  await sleep(4000);
+                  message = ask_modify_keys(RM_KEY, ["key1", "key2"], "ybleyfuez");
+                  msg = JSON.stringify(message);
+                  console.log(msg);
+                  ws.send(msg);
+                  await sleep(4000);
+                  message = ask_renew_slice("ybleyfuez", ["inria_batman", "inria_school"]);
+                  msg = JSON.stringify(message);
+                  console.log(msg);
+                  ws.send(msg);
+                  await sleep(4000);
+                }
+            };
+
+
+            ws.onmessage = function (event) {
+                var messages = document.getElementsByTagName('ul')[0],
+                    message = document.createElement('li'),
+                    content = document.createTextNode(event.data);
+                message.appendChild(content);
+                messages.appendChild(message);
+            };
+            document.body.appendChild(messages);
+        </script>
+    </body>
+</html>
