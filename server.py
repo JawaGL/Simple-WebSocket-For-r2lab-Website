@@ -109,13 +109,8 @@ async def getbookinfo(payload):
                 .strptime(payload['start'], "%Y-%m-%dT%H:%M:%S")
     end = datetime.datetime\
                 .strptime(payload['end'], "%Y-%m-%dT%H:%M:%S")
-    if not payload['list']:
-        # Access DB to get info's that should be display on the BOOK page
-        # And format them in a dictionary
-        pass
-    else:
-        # Only fetch the list of the reservation for the timestamp
-        pass
+    # Access DB to get info's that should be display on the BOOK page
+    # And format them in a dictionary
     return "bla_BOOK info"
 async def book(data):
     type = data['type']

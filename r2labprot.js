@@ -78,11 +78,10 @@ function ask_unregister(){
 //#############################
 //# BOOK
 //#############################
-function ask_book_info(start, end, list=false){
+function ask_book_info(start, end){
     payload = {};
     payload['start'] = start;
     payload['end'] = end;
-    payload['list'] = list;
     return create_message(INFO_REQ, I_BOOK, payload);
 }
 
